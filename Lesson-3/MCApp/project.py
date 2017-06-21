@@ -14,14 +14,14 @@ session = DBSession()
 
 
 @app.route('/')
-@app.route('/restaurants/<int:restaurant_id>/', methods=['GET', 'POST'])
+@app.route('/restaurants/<int:restaurant_id>/')
 def restaurantMenu(restaurant_id):
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
     items = session.query(MenuItem).filter_by(restaurant_id=restaurant.id)
     return render_template('menu.html', restaurant=restaurant, items=items)
 
 # Task 1: Create route for newMenuItem function here
-@app.route('/restaurant/<int:restaurant_id>/new/')
+@app.route('/restaurant/<int:restaurant_id>/new/', methods=['GET', 'POST'])
 def newMenuItem(restaurant_id):
     if request.method == 'POST':
         newItem = MenuItem(name=request.form['name'], restaurant_id=restaurant_id)
