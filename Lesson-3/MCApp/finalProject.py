@@ -12,17 +12,22 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-# # Making an API Endpoint (GET Request)
-# @app.route('/restaurants/<int:restaurant_id>/menu/JSON')
-# def restaurantMenuJSON(restaurant_id):
-#     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
-#     items = session.query(MenuItem).filter_by(restaurant_id=restaurant.id).all()
-#     return jsonify(MenuItems=[i.serialize for i in items])
-#
-# @app.route('/restaurants/<int:restaurant_id>/menu/<int:menu_id>/JSON')
-# def restaurantMenuItemJSON(restaurant_id, menu_id):
-#     menuItem = session.query(MenuItem).filter_by(id=menu_id).one()
-#     return jsonify(MenuItem=[menuItem.serialize])
+# Making an API Endpoint (GET Request)
+@app.route('/restaurants/JSON')
+def restaurantsJSON():
+    items = session.query(Restaurant).all()
+    return jsonify(MenuItems=[i.serialize for i in items])
+
+@app.route('/restaurants/<int:restaurant_id>/menu/JSON')
+def restaurantMenuJSON(restaurant_id):
+    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    items = session.query(MenuItem).filter_by(restaurant_id=restaurant.id).all()
+    return jsonify(MenuItems=[i.serialize for i in items])
+
+@app.route('/restaurants/<int:restaurant_id>/menu/<int:menu_id>/JSON')
+def restaurantMenuItemJSON(restaurant_id, menu_id):
+    menuItem = session.query(MenuItem).filter_by(id=menu_id).one()
+    return jsonify(MenuItem=[menuItem.serialize])
 
 # List restaurants
 @app.route('/')
